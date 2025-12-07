@@ -4,8 +4,11 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  // GitHub Pages 部署：如果设置了 VITE_BASE_PATH，使用它；否则默认 './'（本地开发）
-  const base = process.env.VITE_BASE_PATH || './';
+  // 部署配置：
+  // - GitHub Pages: 需要设置 VITE_BASE_PATH 为 /仓库名/
+  // - Vercel: 使用 '/' (默认，无需设置)
+  // - 本地开发: 使用 './' (默认)
+  const base = process.env.VITE_BASE_PATH || (process.env.VERCEL ? '/' : './');
   return {
     plugins: [react()],
     base: base,

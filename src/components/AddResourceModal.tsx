@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ResourceType } from '../types';
-import { analyzeContent } from '../sercives/geminiService';
+import { analyzeContent } from '../services/deepseekService';
 import { Loader2, X, Wand2 } from 'lucide-react';
 
 interface AddResourceModalProps {
@@ -24,7 +24,7 @@ export const AddResourceModal: React.FC<AddResourceModalProps> = ({ isOpen, onCl
     setIsAnalyzing(true);
 
     try {
-      // 1. Call Gemini to get summary and tags
+      // 1. Call DeepSeek to get summary and tags
       const analysis = await analyzeContent(title, contentRaw || "No detailed content provided", type);
 
       // 2. Construct new resource
@@ -154,7 +154,7 @@ export const AddResourceModal: React.FC<AddResourceModalProps> = ({ isOpen, onCl
               {isAnalyzing ? (
                 <>
                   <Loader2 className="animate-spin w-5 h-5" />
-                  Gemini 正在分析中...
+                  AI 正在分析中...
                 </>
               ) : (
                 <>
@@ -164,7 +164,7 @@ export const AddResourceModal: React.FC<AddResourceModalProps> = ({ isOpen, onCl
               )}
             </button>
             <p className="text-center text-xs text-gray-400 mt-2">
-              Gemini 将根据您的输入自动生成摘要和标签。
+              DeepSeek 将根据您的输入自动生成摘要和标签。
             </p>
           </div>
 
