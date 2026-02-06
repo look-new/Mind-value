@@ -1,49 +1,262 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MindVault - 您的个人知识库</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-            },
-            colors: {
-              brand: {
-                50: '#f0fdfa',
-                100: '#ccfbf1',
-                500: '#14b8a6',
-                600: '#0d9488',
-                900: '#134e4a',
-              }
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      body {
-        background-color: #f8fafc;
-      }
-      /* Hide scrollbar for clean UI in modals */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    </style>
-    <script type="module" crossorigin src="./assets/index-DW1vJVKg.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CvdVtAGZ.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
-</html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindVault - 您的个人知识库</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo-area">
+          <div class="logo-icon">
+            <svg class="icon-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/>
+              <path d="M12 13a7 7 0 0 0-7 7 1 1 0 0 0 2 0 5 5 0 0 1 5-5 5 5 0 0 1 5 5 1 1 0 0 0 2 0 7 7 0 0 0-7-7Z"/>
+              <path d="M12 2a2 2 0 0 0-2 2v1a2 2 0 0 0 4 0V4a2 2 0 0 0-2-2Z"/>
+            </svg>
+          </div>
+          <h1 class="title">思维金库</h1>
+        </div>
 
+        <div class="search-area hidden-mobile">
+          <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="搜索标题或标签..." class="search-input" />
+        </div>
+
+        <button id="addBtn" class="btn-add">
+          <svg class="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+          </svg>
+          <span class="hidden-sm">添加内容</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Search -->
+    <div class="mobile-search">
+      <div class="search-box">
+        <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="text" id="searchInputMobile" placeholder="搜索..." class="search-input" />
+      </div>
+    </div>
+
+    <main class="main">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <h2 class="sidebar-title">收藏分类</h2>
+          <div class="filter-btns">
+            <button class="filter-btn active" data-type="ALL">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/>
+              </svg>
+              全部内容
+            </button>
+            <button class="filter-btn" data-type="VIDEO">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+              </svg>
+              视频
+            </button>
+            <button class="filter-btn" data-type="ARTICLE">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>
+              </svg>
+              文章
+            </button>
+            <button class="filter-btn" data-type="TWEET">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+              </svg>
+              推文 / 短内容
+            </button>
+            <button class="filter-btn" data-type="AUDIO">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+              音频 / 播客
+            </button>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-inner">
+              <h3 class="insight-title">每周洞察</h3>
+              <p class="insight-text">"学而不思则罔，思而不学则殆。"</p>
+              <div class="insight-count" id="resourceCount">已收录 0 条内容</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <div class="content">
+        <div class="content-header">
+          <h2 class="content-title" id="contentTitle">全部内容</h2>
+          <div class="content-meta">
+            <span class="result-count" id="resultCount">0 个结果</span>
+            <select id="sortSelect" class="sort-select">
+              <option value="createdAt_desc">最新在前</option>
+              <option value="createdAt_asc">最早在前</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="tag-filters" id="tagFilters"></div>
+
+        <div id="resourceGrid" class="resource-grid"></div>
+
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>未找到内容</h3>
+          <p>通过添加网络上的有趣文章、视频或想法来构建您的知识库。</p>
+          <button id="emptyAddBtn" class="empty-add-btn">添加第一条内容 →</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-info">
+          <span class="footer-label">本地知识库</span>
+          <span>数据仅保存在你的浏览器 LocalStorage 中。</span>
+        </div>
+        <div class="footer-actions">
+          <button id="exportBtn" class="btn-secondary">导出 JSON 备份</button>
+          <button id="importBtn" class="btn-secondary">导入 JSON</button>
+          <input type="file" id="importInput" accept="application/json" class="hidden" />
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Add Resource Modal -->
+  <div id="addModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>添加到知识库</h2>
+        <button id="closeAddModal" class="modal-close" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <form id="addForm" class="modal-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>类型</label>
+            <select id="addType">
+              <option value="ARTICLE">文章</option>
+              <option value="VIDEO">视频</option>
+              <option value="AUDIO">音频</option>
+              <option value="TWEET">短内容 (推文/微博)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>平台</label>
+            <input type="text" id="addPlatform" list="platforms" placeholder="例如：知乎, Bilibili" value="X" />
+            <datalist id="platforms">
+              <option value="X"/><option value="Zhihu"/><option value="Douyin"/>
+              <option value="Youtube"/><option value="Bilibili"/><option value="WeChat"/><option value="Weibo"/>
+            </datalist>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>链接地址 (URL)</label>
+          <input type="url" id="addUrl" required placeholder="https://..." />
+        </div>
+        <div class="form-group">
+          <label>标题</label>
+          <input type="text" id="addTitle" required placeholder="这篇内容关于什么？" />
+        </div>
+        <div class="form-group">
+          <label>内容 / 描述 <span class="label-hint">(粘贴文本以便 AI 生成更好的摘要)</span></label>
+          <textarea id="addContentRaw" rows="5" placeholder="在此粘贴推文内容、文章片段或您自己的描述..."></textarea>
+        </div>
+        <div class="form-submit">
+          <button type="submit" id="addSubmitBtn" class="btn-submit">
+            <span class="btn-loading hidden" id="addLoading">
+              <svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+              </svg>
+              AI 正在分析中...
+            </span>
+            <span class="btn-text" id="addText">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 4V2m0 2v2m4-4v2m0 2V4M1 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2M1 7V5a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+              </svg>
+              智能分析并添加
+            </span>
+          </button>
+          <p class="submit-hint">DeepSeek 将根据您的输入自动生成摘要和标签。</p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Welcome Modal -->
+  <div id="welcomeModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog modal-welcome">
+      <div class="modal-header welcome-header">
+        <div class="welcome-title-area">
+          <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <h2>欢迎使用思维金库,这里是说明指南，为了让你更好的使用该工具</h2>
+        </div>
+        <button id="closeWelcomeModal" class="modal-close" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="welcome-body">
+        <section>
+          <h3><svg class="icon-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="m9 9 3 3 3-3"/></svg>使用说明</h3>
+          <ul>
+            <li><span class="num">1.</span> 点击右上角 <strong>"添加内容"</strong> 按钮，添加您想要保存的资源</li>
+            <li><span class="num">2.</span> 填写标题、链接和内容描述，AI 会自动生成摘要和标签</li>
+            <li><span class="num">3.</span> 使用顶部搜索框或左侧筛选器快速找到您需要的内容</li>
+            <li><span class="num">4.</span> 点击资源卡片上的笔记区域，记录您的思考和灵感</li>
+          </ul>
+        </section>
+        <section>
+          <h3><svg class="icon-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>注意事项</h3>
+          <ul>
+            <li><span class="warn">⚠</span> <strong>数据存储：</strong>所有数据仅保存在您的浏览器 LocalStorage 中，清除浏览器数据会丢失所有内容</li>
+            <li><span class="warn">⚠</span> <strong>定期备份：</strong>建议定期使用底部的"导出 JSON 备份"功能备份您的数据</li>
+            <li><span class="warn">⚠</span> <strong>AI 功能：</strong>需要配置 DeepSeek API Key 才能使用智能摘要功能（可选）</li>
+          </ul>
+        </section>
+        <section class="privacy-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          <div>
+            <h4>关于数据隐私</h4>
+            <p>您的所有数据都保存在本地浏览器中，不会上传到任何服务器。我们无法访问您的数据，请放心使用。</p>
+          </div>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button id="welcomeOkBtn" class="btn-primary">我知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/deepseekService.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

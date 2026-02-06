@@ -7,7 +7,7 @@ cd /d %~dp0
 REM 先在默认浏览器中打开地址
 start "" http://localhost:5173
 
-REM 启动 Vite 开发服务器（保持窗口打开）
+REM 启动静态文件服务器（保持窗口打开）
 npm run dev
 
 
