@@ -15,6 +15,41 @@ var DeepSeekService = (function () {
            '';
   }
 
+  function parseDeepSeekContent(rawContent) {
+    var text = (rawContent || '').trim();
+    if (!text) {
+      return { summary: '', tags: [] };
+    }
+
+    var cleaned = text
+      .replace(/```json/gi, '')
+      .replace(/```/g, '')
+      .trim();
+
+    var parsed = null;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch (e) {
+      var match = cleaned.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          parsed = JSON.parse(match[0]);
+        } catch (err) {
+          parsed = null;
+        }
+      }
+    }
+
+    if (!parsed || typeof parsed !== 'object') {
+      return { summary: text, tags: [] };
+    }
+
+    return {
+      summary: typeof parsed.summary === 'string' && parsed.summary.trim() ? parsed.summary.trim() : text,
+      tags: Array.isArray(parsed.tags) ? parsed.tags : []
+    };
+  }
+
   function analyzeContent(title, content, type) {
     var apiKey = getApiKey();
 
@@ -74,24 +109,11 @@ var DeepSeekService = (function () {
         throw new Error('DeepSeek 返回内容为空');
       }
 
-      var parsed = {};
-      try {
-        var cleaned = rawContent
-          .replace(/```json/gi, '')
-          .replace(/```/g, '')
-          .trim();
-        parsed = JSON.parse(cleaned);
-      } catch (e) {
-        console.warn('解析 DeepSeek JSON 失败，使用原始文本。', e);
-        parsed.summary = rawContent.trim();
-        parsed.tags = [];
-      }
-
-      var summary = parsed.summary || rawContent.trim();
-      var tags = Array.isArray(parsed.tags) ? parsed.tags : [];
+      var parsed = parseDeepSeekContent(rawContent);
+      var tags = parsed.tags;
 
       return {
-        summary: summary,
+        summary: parsed.summary,
         suggestedTags: tags.length ? tags : ['DeepSeek', type, title || '未分类']
       };
     })
@@ -104,7 +126,14 @@ var DeepSeekService = (function () {
     });
   }
 
-  return {
-    analyzeContent: analyzeContent
+  var exported = {
+    analyzeContent: analyzeContent,
+    _parseDeepSeekContent: parseDeepSeekContent
   };
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = exported;
+  }
+
+  return exported;
 })();
