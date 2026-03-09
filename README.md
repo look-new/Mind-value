@@ -1,73 +1,46 @@
-# React + TypeScript + Vite
+# MindVault（思维金库）
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MindVault 是一个纯前端的个人知识库工具（HTML + CSS + JavaScript），用于收藏文章、视频、音频和短内容，并借助 DeepSeek 生成摘要与标签。
 
-Currently, two official plugins are available:
+## 功能特性
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 添加/编辑/删除资源（文章、视频、音频、推文/短内容）
+- 本地搜索、类型筛选、标签筛选、时间排序
+- 资源笔记编辑与保存
+- JSON 导入 / 导出
+- 可选接入 DeepSeek API 自动生成摘要与标签
 
-## React Compiler
+## 本地运行
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+默认地址：`http://localhost:5173`
+
+## 构建静态文件
+
+```bash
+npm run build
+```
+
+构建结果输出到 `dist/` 目录。
+
+## DeepSeek API Key 配置（可选）
+
+可任选一种方式：
+
+1. 浏览器控制台设置：
 
 ```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+localStorage.setItem('mindvault_deepseek_api_key', '你的API密钥')
 ```
+
+2. 在 `index.html` 的 `<head>` 中注入：
+
+```html
+<script>window.MINDVAULT_DEEPSEEK_API_KEY = '你的API密钥';</script>
+```
+
+未配置 API Key 时，应用会回退到本地默认摘要，不影响基础功能。

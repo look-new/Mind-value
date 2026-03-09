@@ -110,8 +110,9 @@
   }
 
   function getPlatformClass(platform) {
-    var map = { Youtube: 'youtube', Bilibili: 'bilibili', Twitter: 'twitter', X: 'x', Zhihu: 'zhihu', Douyin: 'douyin' };
-    return 'platform-badge ' + (map[platform] || 'default');
+    var map = { youtube: 'youtube', bilibili: 'bilibili', twitter: 'twitter', x: 'x', zhihu: 'zhihu', douyin: 'douyin' };
+    var key = (platform || '').toLowerCase();
+    return 'platform-badge ' + (map[key] || 'default');
   }
 
   function renderResourceCard(r) {

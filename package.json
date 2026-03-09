@@ -6,7 +6,8 @@
     "dev": "npx serve . -p 5173",
     "build": "node build-static.js",
     "preview": "npm run build && npx serve dist -p 4173",
-    "start": "npx serve . -p 5173"
+    "start": "npx serve . -p 5173",
+    "test": "node --test"
   },
   "devDependencies": {
     "serve": "^14.2.1"
