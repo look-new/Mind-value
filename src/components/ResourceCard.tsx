@@ -80,7 +80,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onDelete, 
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            Gemini 智能摘要
+            AI 智能摘要
           </p>
           <p className="text-sm text-gray-600 leading-relaxed">
             {resource.summary || "暂无摘要。"}
